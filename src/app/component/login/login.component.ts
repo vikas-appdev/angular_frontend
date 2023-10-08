@@ -32,16 +32,15 @@ export class LoginComponent {
       .login$(loginForm.value.email, loginForm.value.password)
       .pipe(
         map((response) => {
-          if (response.data.user.usingMFA) {
-            this.phoneSubject.next(response.data?.user.mobileNumber);
-            this.emailSubject.next(response.data?.user?.email);
-            console.log(response.data.user.usingMFA);
+          if (response.data.user.usingMfa) {
+            this.phoneSubject.next(response.data.user.mobileNumber);
+            this.emailSubject.next(response.data.user.email);
             return {
               dataState: DataState.LOADED,
-              isUsingMfA: true,
+              isUsingMfa: true,
               loginSuccess: false,
-              phone: response.data?.user.mobileNumber.substring(
-                response.data?.user.mobileNumber.length - 4
+              phone: response.data.user.mobileNumber.substring(
+                response.data.user.mobileNumber.length - 4
               ),
             };
           } else {
@@ -56,7 +55,6 @@ export class LoginComponent {
         }),
         startWith({ dataState: DataState.LOADING, isUsingMfa: false }),
         catchError((error: string) => {
-          console.log(error);
           return of({
             dataState: DataState.ERROR,
             isUsingMfa: false,
@@ -79,7 +77,7 @@ export class LoginComponent {
         }),
         startWith({
           dataState: DataState.LOADING,
-          isUsingMfA: true,
+          isUsingMfa: true,
           loginSuccess: false,
           phone: this.phoneSubject.value.substring(
             this.phoneSubject.value.length - 4

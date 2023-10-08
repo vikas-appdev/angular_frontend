@@ -29,19 +29,18 @@ export class UserService {
     );
 
   private handleError(error: HttpErrorResponse): Observable<never> {
+    console.log(error);
     let errorMessage: string;
     if (error.error instanceof ErrorEvent) {
       errorMessage = `A client error occurred - ${error.error.message}`;
-      console.log(errorMessage);
     } else {
       if (error.error.reason) {
         errorMessage = error.error.reason;
         console.log(errorMessage);
       } else {
-        errorMessage = `An error occurred - Error code ${error.status}`;
-        console.log(errorMessage);
+        errorMessage = `An error occurred - Error status ${error.status}`;
       }
     }
-    throw throwError(() => errorMessage);
+    return throwError(() => errorMessage);
   }
 }
