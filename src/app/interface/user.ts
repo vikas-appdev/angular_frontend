@@ -16,7 +16,7 @@ export interface User {
   mobileNumber: string;
   title: string;
   bio: string;
-  usingMfa: boolean; // Multi factor authentication
+  usingMFA: boolean; // Multi factor authentication
   address?: Address;
 
   roleName: string;

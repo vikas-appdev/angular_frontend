@@ -32,7 +32,8 @@ export class LoginComponent {
       .login$(loginForm.value.email, loginForm.value.password)
       .pipe(
         map((response) => {
-          if (response.data.user.usingMfa) {
+          console.log(response.data.user.usingMFA);
+          if (response.data.user.usingMFA) {
             this.phoneSubject.next(response.data.user.mobileNumber);
             this.emailSubject.next(response.data.user.email);
             return {

@@ -1,16 +1,18 @@
-<ng-container>
+<ng-container *ngIf="profileState$ | async as state">
   <ng-container>
     <app-navbar></app-navbar>
+    <!-- <div>{{ state | json }}</div> -->
     <section>
       <div class="container">
         <nav aria-label="breadcrumb" style="margin-top: 8px">
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a [routerLink]="['/cutomers']">Home</a>
+              <a [routerLink]="['/']">Home</a>
             </li>
             <li class="breadcrumb-item active">Users</li>
             <li class="breadcrumb-item active" aria-current="page">
-              John Smith
+              {{ state?.appData?.data?.user?.firstName }}
+              {{ state?.appData?.data?.user?.lastName }}
             </li>
           </ol>
         </nav>
@@ -23,15 +25,23 @@
               <div class="img-circle text-center mb-3">
                 <span style="position: relative">
                   <img
-                    src="https://img.freepik.com/free-icon/user_318-159711.jpg"
+                    [src]="state?.appData?.data?.user?.profileImageUrl"
                     alt="John"
                     class="shadow"
                   />
                   <i class="bi bi-camera-fill right-position"></i>
                 </span>
               </div>
-              <h4 class="text-center">John Smith</h4>
-              <span class="">Since March 13, 2023</span>
+              <h4 class="text-center">
+                {{ state?.appData?.data?.user?.firstName }}
+                {{ state?.appData?.data?.user?.lastName }}
+              </h4>
+              <span class=""
+                >Since:
+                {{
+                  state?.appData?.data?.user?.createdAt | date : "d MMM, y"
+                }}</span
+              >
             </div>
             <div
               class="nav flex-column nav-pills"
@@ -122,6 +132,10 @@
                       <input
                         type="text"
                         name="firstName"
+                        [ngModel]="state?.appData?.data?.user?.firstName"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
                         class="form-control"
                       />
                     </div>
@@ -129,21 +143,149 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Last Name</label>
-                      <input type="text" name="lastName" class="form-control" />
+                      <input
+                        type="text"
+                        name="lastName"
+                        [ngModel]="state?.appData?.data?.user?.lastName"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
                       <label for="email">Email</label>
-                      <input type="text" name="email" class="form-control" />
+                      <input
+                        type="text"
+                        name="email"
+                        [ngModel]="state?.appData?.data?.user?.email"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
                     </div>
                   </div>
                   <div class="col-md-6">
                     <div class="form-group">
-                      <label>Phone</label>
-                      <input type="text" name="phone" class="form-control" />
+                      <label>Mobile</label>
+                      <input
+                        type="text"
+                        name="phone"
+                        [ngModel]="state?.appData?.data?.user?.mobileNumber"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
                     </div>
                   </div>
+
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Door No.</label>
+                      <input
+                        type="text"
+                        name="doorNumber"
+                        [ngModel]="
+                          state?.appData?.data?.user?.address?.doorNumber
+                        "
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Street</label>
+                      <input
+                        type="text"
+                        name="street"
+                        [ngModel]="state?.appData?.data?.user?.address?.street"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="form-group">
+                      <label>Locality</label>
+                      <input
+                        type="text"
+                        name="locality"
+                        [ngModel]="
+                          state?.appData?.data?.user?.address?.locality
+                        "
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>City</label>
+                      <input
+                        type="text"
+                        name="city"
+                        [ngModel]="state?.appData?.data?.user?.address?.city"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>State</label>
+                      <input
+                        type="text"
+                        name="state"
+                        [ngModel]="state?.appData?.data?.user?.address?.state"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Country</label>
+                      <input
+                        type="text"
+                        name="country"
+                        [ngModel]="state?.appData?.data?.user?.address?.country"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-3">
+                    <div class="form-group">
+                      <label>Pincode</label>
+                      <input
+                        type="text"
+                        name="pincode"
+                        [ngModel]="state?.appData?.data?.user?.address?.pincode"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
+                    </div>
+                  </div>
+
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Address</label>
@@ -153,14 +295,27 @@
                   <div class="col-md-6">
                     <div class="form-group">
                       <label>Job Title</label>
-                      <input type="text" name="title" class="form-control" />
+                      <input
+                        type="text"
+                        name="title"
+                        [ngModel]="state?.appData?.data?.user?.title"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
+                        class="form-control"
+                      />
                     </div>
                   </div>
+
                   <div class="col-md-12">
                     <div class="form-group">
                       <label>Bio</label>
                       <textarea
                         name="bio"
+                        [ngModel]="state?.appData?.data?.user?.bio"
+                        [disabled]="
+                          state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                        "
                         class="form-control"
                         rows="4"
                       ></textarea>
@@ -168,15 +323,26 @@
                   </div>
                 </div>
                 <div>
-                  <button type="submit" class="btn btn-primary">
+                  <button
+                    [disabled]="
+                      state?.appData?.data?.user?.roleName === 'ROLE_USER'
+                    "
+                    type="submit"
+                    class="btn btn-primary"
+                  >
                     <span
+                      *ngIf="state.dataState === DataState.LOADING"
                       class="spinner-border spinner-border-sm"
                       role="status"
                       aria-hidden="true"
                       style="margin-right: 5px"
                     ></span>
-                    <span>Loading...</span>
-                    <span>Update</span>
+                    <span *ngIf="state.dataState === DataState.LOADING"
+                      >Loading...</span
+                    >
+                    <span *ngIf="!(state.dataState === DataState.LOADING)"
+                      >Update</span
+                    >
                   </button>
                 </div>
               </form>
