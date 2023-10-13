@@ -372,8 +372,10 @@
               style="min-height: 510px"
             >
               <h3 class="mb-4">Password Settings</h3>
-              <form>
-                <input type="hidden" name="userId" />
+              <form
+                #passwordForm="ngForm"
+                (ngSubmit)="updatePassword(passwordForm)"
+              >
                 <div class="row">
                   <div class="col-md-6">
                     <div class="form-group">
@@ -381,6 +383,8 @@
                       <input
                         type="password"
                         name="currentPassword"
+                        ngModel
+                        [disabled]="isLoading$ | async"
                         class="form-control"
                         required
                       />
@@ -394,6 +398,8 @@
                       <input
                         type="password"
                         name="newPassword"
+                        ngModel
+                        [disabled]="isLoading$ | async"
                         class="form-control"
                         minlength="5"
                         required
@@ -405,7 +411,9 @@
                       <label>Confirm new password</label>
                       <input
                         type="password"
-                        name="confirmPassword"
+                        name="confirmNewPassword"
+                        ngModel
+                        [disabled]="isLoading$ | async"
                         class="form-control"
                         minlength="5"
                         required
@@ -415,10 +423,7 @@
                 </div>
                 <div>
                   <button
-                    [disabled]="
-                      state?.appData?.data?.user?.roleName === 'ROLE_USER' ||
-                      (isLoading$ | async)
-                    "
+                    [disabled]="passwordForm.invalid || (isLoading$ | async)"
                     type="submit"
                     class="btn btn-primary"
                   >
