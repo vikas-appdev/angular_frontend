@@ -7,6 +7,7 @@ import {
 import { Observable, catchError, tap, throwError } from 'rxjs';
 import { CustomHttpResponse, Profile } from '../interface/appstates';
 import { User } from '../interface/user';
+import { Key } from '../enum/key.enum';
 
 @Injectable({
   providedIn: 'root',
@@ -33,26 +34,39 @@ export class UserService {
         .pipe(tap(console.log), catchError(this.handleError))
     );
 
-  profile$ = () => <Observable<CustomHttpResponse<Profile>>>this.http
-      .get<CustomHttpResponse<Profile>>(`${this.server}/user/profile`, {
-        headers: new HttpHeaders().set(
-          'Authorization',
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJHcmFkbGljIFNvbHV0aW9ucyBQcml2YXRlIExpbWl0ZWQiLCJhdWQiOiJDVVNUT01FUl9NQU5BR0VNRU5UX1NFUlZJQ0UiLCJpYXQiOjE2OTcwNDc3NzcsInN1YiI6IjEiLCJhdXRob3JpdGllcyI6WyJSRUFEOlVTRVIiLCJSRUFEOkNVU1RPTUVSIl0sImV4cCI6MTY5NzA1MTM3N30.Db6zZp8m9UrJhCrWjhYhEx_2-QxN6atk_Yt3r0uilqjr0c-yWFPj0NlN8MnRxF9cYtizj4tEps9A2D2QbZM7fg'
-        ),
-      })
-      .pipe(tap(console.log), catchError(this.handleError));
+  profile$ = () =>
+    <Observable<CustomHttpResponse<Profile>>>(
+      this.http
+        .get<CustomHttpResponse<Profile>>(`${this.server}/user/profile`)
+        .pipe(tap(console.log), catchError(this.handleError))
+    );
 
-  update$ = (user: User) => <Observable<CustomHttpResponse<Profile>>>this.http
-      .patch<CustomHttpResponse<Profile>>(`${this.server}/user/update`, user, {
-        headers: new HttpHeaders().set(
-          'Authorization',
-          'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJHcmFkbGljIFNvbHV0aW9ucyBQcml2YXRlIExpbWl0ZWQiLCJhdWQiOiJDVVNUT01FUl9NQU5BR0VNRU5UX1NFUlZJQ0UiLCJpYXQiOjE2OTcwNDc3NzcsInN1YiI6IjEiLCJhdXRob3JpdGllcyI6WyJSRUFEOlVTRVIiLCJSRUFEOkNVU1RPTUVSIl0sImV4cCI6MTY5NzA1MTM3N30.Db6zZp8m9UrJhCrWjhYhEx_2-QxN6atk_Yt3r0uilqjr0c-yWFPj0NlN8MnRxF9cYtizj4tEps9A2D2QbZM7fg'
-        ),
+  update$ = (user: User) =>
+    <Observable<CustomHttpResponse<Profile>>>(
+      this.http
+        .patch<CustomHttpResponse<Profile>>(`${this.server}/user/update`, user)
+        .pipe(tap(console.log), catchError(this.handleError))
+    );
+
+  refreshToken$ = () => <Observable<CustomHttpResponse<Profile>>>this.http
+      .get<CustomHttpResponse<Profile>>(`${this.server}/user/refresh/token`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}`,
+        },
       })
-      .pipe(tap(console.log), catchError(this.handleError));
+      .pipe(
+        tap((response) => {
+          console.log('Response: ', response);
+          localStorage.removeItem(Key.TOKEN);
+          localStorage.removeItem(Key.REFRESH_TOKEN);
+          localStorage.setItem(Key.TOKEN, response.data.access_token);
+          localStorage.setItem(Key.REFRESH_TOKEN, response.data.refresh_token);
+        }),
+        catchError(this.handleError)
+      );
 
   private handleError(error: HttpErrorResponse): Observable<never> {
-    console.log(error);
+    console.log('Error: ', error);
     let errorMessage: string;
     if (error.error instanceof ErrorEvent) {
       errorMessage = `A client error occurred - ${error.error.message}`;
