@@ -9,8 +9,8 @@ export interface User {
   lastLoginDate: Date;
   lastLoginDateDisplay: Date;
   createdAt: Date;
-  isActive: boolean; // enabled
-  isNotLocked: boolean;
+  active: boolean; // enabled
+  notLocked: boolean;
   userNFCIdCardNumber: string;
   aadhaarNumber: string;
   mobileNumber: string;
