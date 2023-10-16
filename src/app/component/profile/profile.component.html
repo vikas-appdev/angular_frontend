@@ -29,7 +29,10 @@
                     alt="John"
                     class="shadow"
                   />
-                  <i class="bi bi-camera-fill right-position"></i>
+                  <i
+                    (click)="fileInput.click()"
+                    class="bi bi-camera-fill right-position"
+                  ></i>
                 </span>
               </div>
               <h4 class="text-center">
@@ -743,6 +746,8 @@
 <form enctype="multipart/form-data" style="display: none">
   <input
     type="file"
+    #fileInput
+    (change)="updatePicture($event.target.files[0])"
     name="image"
     id="image"
     placeholder="file"
