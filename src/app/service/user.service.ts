@@ -14,11 +14,11 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly server: string = 'http://localhost:8080';
+  private readonly server: string = 'http://192.168.1.112:8080';
 
   private jwtHelper = new JwtHelperService();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   login$ = (email: string, password: string) =>
     <Observable<CustomHttpResponse<Profile>>>this.http
@@ -52,21 +52,21 @@ export class UserService {
     );
 
   refreshToken$ = () => <Observable<CustomHttpResponse<Profile>>>this.http
-      .get<CustomHttpResponse<Profile>>(`${this.server}/user/refresh/token`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}`,
-        },
-      })
-      .pipe(
-        tap((response) => {
-          console.log('Response: ', response);
-          localStorage.removeItem(Key.TOKEN);
-          localStorage.removeItem(Key.REFRESH_TOKEN);
-          localStorage.setItem(Key.TOKEN, response.data.access_token);
-          localStorage.setItem(Key.REFRESH_TOKEN, response.data.refresh_token);
-        }),
-        catchError(this.handleError)
-      );
+    .get<CustomHttpResponse<Profile>>(`${this.server}/user/refresh/token`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem(Key.REFRESH_TOKEN)}`,
+      },
+    })
+    .pipe(
+      tap((response) => {
+        console.log('Response: ', response);
+        localStorage.removeItem(Key.TOKEN);
+        localStorage.removeItem(Key.REFRESH_TOKEN);
+        localStorage.setItem(Key.TOKEN, response.data.access_token);
+        localStorage.setItem(Key.REFRESH_TOKEN, response.data.refresh_token);
+      }),
+      catchError(this.handleError)
+    );
 
   updatePassword$ = (form: {
     currentPassword: string;
@@ -140,7 +140,12 @@ export class UserService {
 
   isAuthenticated = (): boolean =>
     this.jwtHelper.decodeToken<string>(localStorage.getItem(Key.TOKEN)) &&
-    !this.jwtHelper.isTokenExpired(localStorage.getItem(Key.TOKEN))
+      !this.jwtHelper.isTokenExpired(localStorage.getItem(Key.TOKEN))
       ? true
       : false;
+
+  logOut() {
+    localStorage.removeItem(Key.TOKEN);
+    localStorage.removeItem(Key.REFRESH_TOKEN);
+  }
 }
