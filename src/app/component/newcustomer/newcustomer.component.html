@@ -1,0 +1,91 @@
+<ng-container *ngIf="newCustomerState$ | async as state" [ngSwitch]="state.dataState">
+    <ng-container *ngSwitchCase="DataState.LOADED">
+        <app-navbar [user]="state?.appData?.data?.user"></app-navbar>
+        <section>
+            <div class="container">
+                <nav aria-label="breadcrumb" style="margin-top: 8px;">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/customers']">customers</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">New</li>
+                    </ol>
+                </nav>
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h2><i style="margin-right: 5px;" class="bi bi-person-plus-fill"></i> New Customer</h2>
+                                </div>
+                                <div *ngIf="state.error" class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
+                                    {{ state.error }}
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <form #newCustomerForm="ngForm" (ngSubmit)="createCustomers(newCustomerForm)">
+                                    <div class="row">
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="name">Name</label>
+                                                <input type="text" ngModel name="name" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="email" ngModel="email@email.com" name="email" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="address">Address</label>
+                                                <input type="text" ngModel name="address" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="phone">Phone</label>
+                                                <input type="number" ngModel name="phone" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="phone">Type</label>
+                                                <select name="type" ngModel="INDIVIDUAL" class="form-control" required="required">
+                                                    <option value="INDIVIDUAL">INDIVIDUAL</option>
+                                                    <option value="BUSINESS">BUSINESS</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="phone">Status</label>
+                                                <select name="status" ngModel="ACTIVE" class="form-control" required="required">
+                                                    <option [selected]="true" value="ACTIVE">ACTIVE</option>
+                                                    <option value="BANNED">BANNED</option>
+                                                    <option value="PENDING">PENDING</option>
+                                                    <option value="INACTIVE">INACTIVE</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="phone">Image Url</label>
+                                                <input type="text" ngModel="https://img.freepik.com/free-psd/3d-illustration-person-with-sunglasses_23-2149436188.jpg" name="imageUrl" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <button [disabled]="state.dataState === DataState.LOADING || newCustomerForm.invalid || newCustomerForm.pristine || (isLoading$ |async)" type="submit" class="btn btn-primary mt-5">
+                                            <span *ngIf="isLoading$ |async" class="spinner-border spinner-border-sm" role="status" arial-hidden="true" style="margin-right: 5px;"></span>
+                                            <span *ngIf="isLoading$ |async">Saving...</span>
+                                            <span *ngIf="!(isLoading$ |async)">Save Customer</span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ng-container>
+</ng-container>

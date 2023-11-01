@@ -14,7 +14,8 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   providedIn: 'root',
 })
 export class UserService {
-  private readonly server: string = 'http://192.168.1.112:8080';
+  private readonly server: string = 'http://localhost:8080';
+  // private readonly server: string = 'http://68.183.93.191:8080';
 
   private jwtHelper = new JwtHelperService();
 

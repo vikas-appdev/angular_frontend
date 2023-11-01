@@ -34,7 +34,7 @@
                   <th class="text-center" scope="col">ID</th>
                   <th scope="col">Photo</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Email</th>
+                  <th scope="col">Address</th>
                   <th scope="col">Phone</th>
                   <th scope="col">Status</th>
                   <th scope="col">Type</th>
@@ -54,7 +54,7 @@
                     />
                   </td>
                   <td>{{ customer.name }}</td>
-                  <td>{{ customer.email }}</td>
+                  <td>{{ customer.address }}</td>
                   <td>{{ customer.phone }}</td>
                   <td>
                     <span class="badge" 
@@ -67,7 +67,9 @@
                   </td>
                   <td>{{ customer.type }}</td>
                   <td>
-                    <button type="button" (click)="selectCustomer(customer)" class="btn btn-info">View</button>
+                    <!-- <button type="button" (click)="selectCustomer(customer)" class="btn btn-info">View</button> -->
+                    <!-- <button type="button" (click)="createLoan(customer.id)" class="btn btn-info">View</button> -->
+                    <button type="button" [routerLink]="['/customers', customer.id]" class="btn btn-info">View</button>
                   </td>
                 </tr>
               </tbody>

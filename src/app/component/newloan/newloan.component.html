@@ -1,0 +1,55 @@
+<ng-container *ngIf="newCustomerState$ | async as state" [ngSwitch]="state.dataState">
+    <ng-container *ngSwitchCase="DataState.LOADED">
+        <app-navbar [user]="state?.appData?.data?.user"></app-navbar>
+        <section>
+            <div class="container">
+                <nav aria-label="breadcrumb" style="margin-top: 8px;">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a [routerLink]="['/']">Home</a></li>
+                        <li class="breadcrumb-item"><a [routerLink]="['/customers']">customers</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">New</li>
+                    </ol>
+                </nav>
+                <div class="row justify-content-center">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h2><i style="margin-right: 5px;" class="bi bi-person-plus-fill"></i> Create New Loan Account</h2>
+                                </div>
+                                <div *ngIf="state.error" class="alert alert-danger bg-danger text-light border-0 alert-dismissible fade show" role="alert">
+                                    {{ state.error }}
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <form #newCustomerForm="ngForm" (ngSubmit)="createLoanAccount(newCustomerForm)">
+                                    <div class="row">
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="amount">Amount</label>
+                                                <input type="text" ngModel name="totalAmount" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6" style="margin-bottom: 15px;">
+                                            <div class="form-group">
+                                                <label for="accountOpeningDate">Account Opening Date</label>
+                                                <input type="date" ngModel name="accountOpeningDate" class="form-control" required>
+                                            </div>
+                                        </div>
+                                        
+                                        
+                                        <button [disabled]="state.dataState === DataState.LOADING || newCustomerForm.invalid || newCustomerForm.pristine || (isLoading$ |async)" type="submit" class="btn btn-primary mt-5">
+                                            <span *ngIf="isLoading$ |async" class="spinner-border spinner-border-sm" role="status" arial-hidden="true" style="margin-right: 5px;"></span>
+                                            <span *ngIf="isLoading$ |async">Saving...</span>
+                                            <span *ngIf="!(isLoading$ |async)">Save Customer</span>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </ng-container>
+</ng-container>

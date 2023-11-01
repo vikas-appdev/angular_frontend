@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Route, Router } from '@angular/router';
 import { BehaviorSubject, Observable, catchError, map, of, startWith } from 'rxjs';
 import { DataState } from 'src/app/enum/datastate.enum';
 import { EventType } from 'src/app/enum/eventtype.enum';
@@ -29,7 +30,7 @@ export class HomeComponent implements OnInit {
 
   readonly DataState = DataState;
 
-  constructor(private userService: UserService, private customerService: CustomerService) { }
+  constructor(private userService: UserService, private customerService: CustomerService, private router: Router) { }
 
   ngOnInit(): void {
     this.homeState$ = this.customerService.customers$().pipe(
@@ -67,7 +68,11 @@ export class HomeComponent implements OnInit {
   }
 
   selectCustomer(customer: Customer): void {
+    this.router.navigate([`/customers/${customer.id}`])
+  }
 
+  createLoan(id) {
+    this.router.navigate(['newloan', id])
   }
 
 }
